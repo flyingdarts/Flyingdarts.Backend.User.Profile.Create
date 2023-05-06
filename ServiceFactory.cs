@@ -1,15 +1,8 @@
-
-using Amazon;
-using Amazon.Extensions.NETCore.Setup;
-using System.IO;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.Extensions.DependencyInjection;
-using MediatR;
 using FluentValidation;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 
 public static class ServiceFactory
 {
