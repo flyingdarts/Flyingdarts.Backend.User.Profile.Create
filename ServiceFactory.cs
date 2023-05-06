@@ -16,8 +16,6 @@ public static class ServiceFactory
     public static ServiceProvider GetServiceProvider()
     {
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true)
             .AddSystemsManager($"/{System.Environment.GetEnvironmentVariable("EnvironmentName")}")
             .Build();
 
@@ -29,16 +27,4 @@ public static class ServiceFactory
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateUserProfileCommand).Assembly));
         return services.BuildServiceProvider();
     }
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.ConfigureKestrel(x => x.AddServerHeader = false);
-                webBuilder.UseStartup<Startup>();
-            })
-            .ConfigureAppConfiguration((environment, app) =>
-            {
-                app.AddSystemsManager($"/{environment.HostingEnvironment.EnvironmentName}");
-            });
 }
