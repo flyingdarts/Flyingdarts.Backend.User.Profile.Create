@@ -7,6 +7,7 @@ using Flyingdarts.Persistence;
 using Flyingdarts.Shared;
 using MediatR;
 using Microsoft.Extensions.Options;
+using ApplicationOptions = Flyingdarts.Shared.ApplicationOptions;
 
 public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfileCommand, APIGatewayProxyResponse>
 {
