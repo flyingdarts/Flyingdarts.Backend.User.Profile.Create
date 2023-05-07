@@ -22,7 +22,7 @@ public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfile
     public async Task<APIGatewayProxyResponse> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
     {
         var userProfile = UserProfile.Create(request.UserName, request.Email, request.Country);
-        var user = User.Create(request.SocialLoginProviderId, userProfile);
+        var user = User.Create(request.CognitoUserId, request.SocialLoginProviderId, userProfile);
 
         var userWrite = _dbContext.CreateBatchWrite<User>(_applicationOptions.Value.ToOperationConfig());
         userWrite.AddPutItem(user);
