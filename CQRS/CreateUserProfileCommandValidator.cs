@@ -4,7 +4,7 @@ public class CreateUserProfileCommandValidator : AbstractValidator<CreateUserPro
 {
     public CreateUserProfileCommandValidator()
     {
-        RuleFor(x => x.SocialLoginProviderId)
+        RuleFor(x => x.CognitoUserId)
             .Must(x => x.Contains("facebook"));
 
         RuleFor(x => x.UserName)
