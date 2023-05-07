@@ -1,4 +1,6 @@
+using System;
 using Amazon.Lambda.APIGatewayEvents;
+using Amazon.Lambda.Core;
 using Flyingdarts.Lambdas.Shared;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,11 +17,23 @@ public class InnerHandler
     {
         _mediator = serviceProvider.GetRequiredService<IMediator>();
     }
-    public async Task<APIGatewayProxyResponse> Handle(SocketMessage<CreateUserProfileCommand> request)
+    public async Task<APIGatewayProxyResponse> Handle(SocketMessage<CreateUserProfileCommand> request, ILambdaContext context)
     {
-        if (request?.Message is null)
-            throw new BadRequestException("Unable to parse request.", typeof(CreateUserProfileCommand));
-        
-        return await _mediator.Send(request.Message);
+        try
+        {
+            if (request?.Message is null)
+                throw new BadRequestException("Unable to parse request.", typeof(CreateUserProfileCommand));
+
+            return await _mediator.Send(request.Message);
+        }
+        catch (Exception ex)
+        {
+            context.Logger.LogError($"{ex.Message}\n{ex.StackTrace}");
+            return new APIGatewayProxyResponse
+            {
+                StatusCode = 400,
+                Body = ex.Message
+            };
+        }
     }
 }
