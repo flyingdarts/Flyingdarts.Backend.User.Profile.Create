@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
 using Flyingdarts.Persistence;
-using Flyingdarts.Shared;
 using MediatR;
 using Microsoft.Extensions.Options;
 using ApplicationOptions = Flyingdarts.Shared.ApplicationOptions;
