@@ -3,6 +3,7 @@ using Amazon.Lambda.APIGatewayEvents;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
+using Flyingdarts.Lambdas.Shared;
 using Flyingdarts.Persistence;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -28,10 +29,16 @@ public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfile
 
         await userWrite.ExecuteAsync(cancellationToken);
 
+        var socketMessage = new SocketMessage<CreateUserProfileResponse>
+        {
+            Action = "v2/users/profile/create",
+            Message = CreateUserProfileResponse.From(user, userProfile)
+        };
+
         return new APIGatewayProxyResponse
         {
             StatusCode = 200,
-            Body = JsonSerializer.Serialize(CreateUserProfileResponse.From(user, userProfile))
+            Body = JsonSerializer.Serialize(socketMessage)
         };
     }
 
