@@ -31,7 +31,26 @@ public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfile
         return new APIGatewayProxyResponse
         {
             StatusCode = 200,
-            Body = JsonSerializer.Serialize(userProfile)
+            Body = JsonSerializer.Serialize(CreateUserProfileResponse.From(user, userProfile))
         };
+    }
+
+    class CreateUserProfileResponse
+    {
+        public long UserId { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string Country { get; set; }
+
+        public static CreateUserProfileResponse From(User user, UserProfile userProfile)
+        {
+            return new CreateUserProfileResponse
+            {
+                UserId = user.UserId,
+                UserName = userProfile.UserName,
+                Email = userProfile.Email,
+                Country = userProfile.Country
+            };
+        }
     }
 }
