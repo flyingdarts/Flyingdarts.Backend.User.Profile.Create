@@ -22,7 +22,7 @@ public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfile
     public async Task<APIGatewayProxyResponse> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
     {
         var userProfile = UserProfile.Create(request.UserName, request.Email, request.Country);
-        var user = User.Create(request.CognitoUserId, userProfile);
+        var user = User.Create(request.CognitoUserId, request.CognitoUserName, userProfile);
 
         var userWrite = _dbContext.CreateBatchWrite<User>(_applicationOptions.Value.ToOperationConfig());
         userWrite.AddPutItem(user);
@@ -44,7 +44,7 @@ public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfile
 
     class CreateUserProfileResponse
     {
-        public long UserId { get; set; }
+        public string UserId { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Country { get; set; }
@@ -53,7 +53,7 @@ public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfile
         {
             return new CreateUserProfileResponse
             {
-                UserId = user.UserId,
+                UserId = user.UserId.ToString(),
                 UserName = userProfile.UserName,
                 Email = userProfile.Email,
                 Country = userProfile.Country
