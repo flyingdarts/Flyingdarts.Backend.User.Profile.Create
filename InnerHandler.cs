@@ -27,6 +27,7 @@ public class InnerHandler
             if (request?.Message is null)
                 throw new BadRequestException("Unable to parse request.", typeof(CreateUserProfileCommand));
             context.Logger.LogInformation(_applicationOptions.DynamoDbTable);
+
             return await _mediator.Send(request.Message);
         }
         catch (Exception ex)
